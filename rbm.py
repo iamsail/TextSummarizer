@@ -458,7 +458,9 @@ def test_rbm(dataset,learning_rate=0.1, training_epochs=5, batch_size=4,n_chains
     print(number_of_test_samples)
 
     # pick random test examples, with which to initialize the persistent chain
-    test_idx = rng.randint(number_of_test_samples - n_chains)
+    print('number_of_test_samples - n_chains ===------->', number_of_test_samples , n_chains)
+    # test_idx = rng.randint(number_of_test_samples - n_chains)
+    test_idx = rng.randint(abs(number_of_test_samples - n_chains))
     persistent_vis_chain = theano.shared(
         numpy.asarray(
             test_set_x[test_idx:test_idx + n_chains],

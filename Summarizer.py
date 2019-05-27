@@ -16,8 +16,9 @@ import math
 from operator import itemgetter
 import pandas as pd
 import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
+import importlib
+importlib.reload(sys)
+# sys.setdefaultencoding('utf8')
 from nltk.stem import PorterStemmer
 from collections import Counter
 import para_reader
@@ -39,36 +40,62 @@ starters = "(Mr|Mrs|Ms|Dr|He\s|She\s|It\s|They\s|Their\s|Our\s|We\s|But\s|Howeve
 acronyms = "([A-Z][.][A-Z][.](?:[A-Z][.])?)"
 websites = "[.](com|net|org|io|gov)"
 
-stop = set(stopwords.words('english'))
-
+# stop = set(stopwords.words('english'))
+stop = set(stopwords.words('chinese'))
 def split_into_sentences(text):
     text = " " + text + "  "
     text = text.replace("\n"," ")
-    text = re.sub(prefixes,"\\1<prd>",text)
-    text = re.sub(websites,"<prd>\\1",text)
-    if "Ph.D" in text: text = text.replace("Ph.D.","Ph<prd>D<prd>")
-    text = re.sub("\s" + caps + "[.] "," \\1<prd> ",text)
-    text = re.sub(acronyms+" "+starters,"\\1<stop> \\2",text)
-    text = re.sub(caps + "[.]" + caps + "[.]" + caps + "[.]","\\1<prd>\\2<prd>\\3<prd>",text)
-    text = re.sub(caps + "[.]" + caps + "[.]","\\1<prd>\\2<prd>",text)
-    text = re.sub(" "+suffixes+"[.] "+starters," \\1<stop> \\2",text)
-    text = re.sub(" "+suffixes+"[.]"," \\1<prd>",text)
-    text = re.sub(" " + caps + "[.]"," \\1<prd>",text)
-    if "”" in text: text = text.replace(".”","”.")
-    if "\"" in text: text = text.replace(".\"","\".")
-    if "!" in text: text = text.replace("!\"","\"!")
-    if "?" in text: text = text.replace("?\"","\"?")
-    #if "," in text: text = text.replace(",\"","\",")
-
-    text = text.replace(".",".<stop>")
-    text = text.replace("?","?<stop>")
-    text = text.replace("!","!<stop>")
+    text = text.replace("。", ".<stop>")
+    text = text.replace("；", ".<stop>")
+    text = text.replace("？", ".<stop>")
+    text = text.replace("！", ".<stop>")
+    text = text.replace(".", ".<stop>")
+    text = text.replace("?", "?<stop>")
+    text = text.replace("!", "!<stop>")
     #text = text.replace(",","!<stop>")
-    text = text.replace("<prd>",".")
     sentences = text.split("<stop>")
     sentences = sentences[:-1]
     sentences = [s.strip() for s in sentences]
+
+    for i in range(len(sentences)-1, -1, -1):
+        if sentences[i] == "":
+            sentences.pop(i)
+
     return sentences
+
+
+
+
+
+
+# def split_into_sentences(text):
+#     text = " " + text + "  "
+#     text = text.replace("\n"," ")
+#     text = re.sub(prefixes,"\\1<prd>",text)
+#     text = re.sub(websites,"<prd>\\1",text)
+#     if "Ph.D" in text: text = text.replace("Ph.D.","Ph<prd>D<prd>")
+#     text = re.sub("\s" + caps + "[.] "," \\1<prd> ",text)
+#     text = re.sub(acronyms+" "+starters,"\\1<stop> \\2",text)
+#     text = re.sub(caps + "[.]" + caps + "[.]" + caps + "[.]","\\1<prd>\\2<prd>\\3<prd>",text)
+#     text = re.sub(caps + "[.]" + caps + "[.]","\\1<prd>\\2<prd>",text)
+#     text = re.sub(" "+suffixes+"[.] "+starters," \\1<stop> \\2",text)
+#     text = re.sub(" "+suffixes+"[.]"," \\1<prd>",text)
+#     text = re.sub(" " + caps + "[.]"," \\1<prd>",text)
+#     if "”" in text: text = text.replace(".”","”.")
+#     if "\"" in text: text = text.replace(".\"","\".")
+#     if "!" in text: text = text.replace("!\"","\"!")
+#     if "?" in text: text = text.replace("?\"","\"?")
+#     #if "," in text: text = text.replace(",\"","\",")
+
+#     text = text.replace(".",".<stop>")
+#     text = text.replace("?","?<stop>")
+#     text = text.replace("!","!<stop>")
+#     #text = text.replace(",","!<stop>")
+#     text = text.replace("<prd>",".")
+#     sentences = text.split("<stop>")
+#     sentences = sentences[:-1]
+#     sentences = [s.strip() for s in sentences]
+#     return sentences
 
 
 # In[20]:
@@ -127,6 +154,7 @@ def posTagger(tokenized_sentences) :
 def tfIsf(tokenized_sentences):
     scores = []
     COUNTS = []
+    print('tokenized_sentences---> ', tokenized_sentences)
     for sentence in tokenized_sentences :
         counts = collections.Counter(sentence)
         isf = []
@@ -193,6 +221,8 @@ def get_cosine(vec1, vec2):
 
 
 def centroidSimilarity(sentences,tfIsfScore) :
+    print('tfIsfScore=====> ', tfIsfScore)
+    print('sentences==---> ', sentences)
     centroidIndex = tfIsfScore.index(max(tfIsfScore))
     scores = []
     for sentence in sentences :
@@ -248,7 +278,8 @@ def sentencePos(sentences) :
 
 def sentenceLength(tokenized_sentences) :
     count = []
-    maxLength = sys.maxint
+    # maxLength = sys.maxint
+    maxLength = sys.maxsize
     for sentence in tokenized_sentences:
         num_words = 0
         for word in sentence :
@@ -336,6 +367,7 @@ def executeForAFile(filename,output_file_name,cwd) :
     print(paragraphs)
     print("Number of paras : %d", len(paragraphs))
     sentences = split_into_sentences(text)
+    print('sentences---> ', sentences)
     text_len = len(sentences)
     sentenceLengths.append(text_len)
     
@@ -343,7 +375,7 @@ def executeForAFile(filename,output_file_name,cwd) :
     tagged = posTagger(remove_stop_words(sentences))
 
     thematicFeature(tokenized_sentences)
-    print(upperCaseFeature(sentences))
+    # print(upperCaseFeature(sentences))
     print("LENNNNN : ")
     print(len(sentencePosition(paragraphs)))
 
@@ -427,7 +459,8 @@ def executeForAFile(filename,output_file_name,cwd) :
     indeces_extracted = []
     indeces_extracted.append(0)
 
-    for x in range(length_to_be_extracted) :
+    # for x in range(length_to_be_extracted) :
+    for x in range(int(length_to_be_extracted)) :
         if(enhanced_feature_sum[x][1] != 0) :
             extracted_sentences.append([sentences[enhanced_feature_sum[x][1]], enhanced_feature_sum[x][1]])
             indeces_extracted.append(enhanced_feature_sum[x][1])

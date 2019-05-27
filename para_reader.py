@@ -24,8 +24,8 @@ class Paragraphs:
 
 
     def __getitem__(self, index):
-        if index != self.para_num:
-            raise TypeError, "Only sequential access supported"
+        # if index != self.para_num:
+            # raise TypeError, "Only sequential access supported"
         
         self.para_num += 1
         # Start where we left off and skip 0+ separator lines

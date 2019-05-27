@@ -1,17 +1,9 @@
-Part of a graveyard dating back around 3,400 years has been unearthed in southern Egypt at the site of Gebel el Silsila, Egypt's antiquities ministry has announced.
+继承与派生是面向对象程序设计的一个重要特性，是人们对自然界中事物间关系观察、分类的体现，反映了事物从抽象到具体的描述。有了继承与派生的机制，程序员就可以从一个抽象的基类出发，以较小的代价建立起一个派生类，派生类在继承基类成员的基础上，还可以进行改进和扩展，不仅实现了“代码重用”，而且也保持了足够的灵活性。
 
-The discovery was made by a team from Sweden's Lund University, led by researcher Maria Nilsson. Previously, the Lund University researchers had uncovered part of the cemetery during their 2015-2016 field season, and their more recent work in the 2016-2017 field season has revealed more of it, according to a statement from the ministry. [See Photos of the Crypts Discovered at Gebel el Silsila]
+面向对象程序设计中类的继承和派生的概念，是人们对自然界中事物进行观察、分类和认识过程在程序设计中的体现。尽管现实世界中的事物纷繁复杂，但它们之间都是相互联系、相互作用的。人们在认识事物过程中，首先依据这些事物的实际特征，提炼共同特性、忽略细微差别，然后再利用分类的方法进行分析和描述。比如对于运输工具分类的问题，可用图11-1的分类树说明。
 
-The tombs range in size from large crypts that may hold the bones of complete families to smaller tombs that are sometimes little more than shallow graves with a few stones on top. Children and infants were found in some of the simpler graves. Two of the children were buried "within the overhangs of the natural sandstone bluffs," Nasr Salama, an archaeologist with the antiquities ministry who is general director of Aswan antiquities, said in the statement.
+图11-1的分类树反映了运输工具的派生关系，最高层（如运输工具）的抽象程度最高，是最具有普遍和一般意义的概念，下层具有上层的特性，同时也加入了自己的新特征，而最下层（如电力机车、客车）是最具体的。在这个层次结构中，由上到下是一个具体化、特殊化的过程；由下到上，是一个抽象化、概括化的过程。上下层之间的关系可以看作是基类与派生类的关系。
 
-An analysis of the skeletons found in the cemetery revealed that, in their lifetimes, the people buried there performed jobs that involved a heavy amount of manual labor and high risk of accidents.
+假如我们要开发一个系统对这四类运输工具（火车、汽车、轮船、飞机）进行管理。在系统中不仅需要管理这些运输工具的属性信息，如编号、名称、速度、燃料类型、载客量或载货量等，还要管理这些运输工具的动态信息（如燃油消耗计算、运输费用计算等），由于这些动态信息的计算方法都不尽相同，因此不能用同一个类来描述，只能考虑设计四个类分别描述这四类运输工具。该如何描述这四类运输工具呢？最简单的方法应该是首先统一描述运输工具的共性，包括针对所有运输工具都应该具有的处理功能（如描述该运输工具的名称、编号等）；其次当描述到每一类具体的运输工具时，首先说明它是运输工具，然后在此基础上逐一描述特殊运输工具的个性（如不同的燃油消耗计算方法和运输费用计算方法），其中还包括对同种功能的不同实现方法（如客车和货车的燃油计算方法是不一样的）。这种描述方法反映到面向对象的程序设计中就是类的继承与派生，对各类运输工具的统一描述构成了一个基类（或称父类），而对每一类具体运输工具的详细描述则可以通过从基类导出的派生类（或称子类）来实现。	
 
-"Fractures of the long bones and increased muscle attachments amongst the skeletal remains indicate behaviors related to occupational hazards and an extremely labor-intensive environment," Nilsson said.
-
-However, although they performed hard labor, those individuals also appear to have had access to decent food and medical care. So far, little evidence for malnutrition has been found among the skeletal remains, and "many of the injuries appear to be in an advanced stage of healing, suggesting effective medical care," Nilsson said in the statement.
-
-The researchers also found evidence of the food the people would have consumed and some of the resources accessible to them.
-
-"Fossils of sheep and goats, as well as a couple of Nile perch and almost complete crocodile, were found along with sandstone sarcophagi, sculptured and occasionally painted pottery coffins, painted cartonnage [a material used in creating mummy masks and some types of coffins], textile and organic wrapping, ceramic vessels and plates, as well as an array of jewelry, amulets and scarabs [artifacts shaped like a scarab beetle that sometimes contain writing]," Nilsson said.
-
-At least one amulet shows an image of Bes, a googly-eyed god that the ancient Egyptians believed could protect children and pregnant mothers from evil forces, Nilsson added.
+面向对象程序设计的重要特性之一就是代码重用，通过代码重用能提高程序开发效率。为了达到这个目的，在面向对象的程序设计中，采取的措施之一就是使用继承与派生。类的派生实际是一种演化、发展过程，即通过扩展、改进和具体化，从一个已知类出发建立一个新类，通过类的派生可以建立具有共同关键特征的对象家族，从而实现代码重用。
